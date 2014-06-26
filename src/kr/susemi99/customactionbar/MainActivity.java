@@ -4,11 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
 
 public class MainActivity extends Activity
 {
@@ -62,7 +68,30 @@ public class MainActivity extends Activity
     {
       _currentMode = ACTION_MODE.DELETE;
       _actionMode = startActionMode(new ActionModeCallback());
-      _actionMode.setTitle("xx selected");
+//      _actionMode.setTitle("xx selected");
+      
+      View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.view_delete_mode, null);
+      final TextView text1 = (TextView) view.findViewById(R.id.textView1);
+      CheckBox check1 = (CheckBox) view.findViewById(R.id.checkBox1);
+      check1.setOnCheckedChangeListener(new OnCheckedChangeListener()
+      {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+        {
+          text1.setText(isChecked ? "selected all" : "not selected");
+        }
+      });
+      ImageButton btn = (ImageButton) view.findViewById(R.id.btn_delete_all);
+      btn.setOnClickListener(new OnClickListener()
+      {
+        @Override
+        public void onClick(View v)
+        {
+          deleteAll();
+        }
+      });
+      
+      _actionMode.setCustomView(view);
     }
     else
     {
@@ -86,8 +115,8 @@ public class MainActivity extends Activity
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu)
     {
-      mode.getMenuInflater().inflate(R.menu.main_delete_mode, menu);
-      return true;
+//      mode.getMenuInflater().inflate(R.menu.main_delete_mode, menu);
+      return true; // important!
     }
     
     
